@@ -1,22 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Post from './Post';
+import { db} from './firebase';
 
 function App() {
-    const [post, setPost] = useState([
-        {
-            username: 'Peter',
-            caption: 'Wow it works',
-            imageUrl:
-                'https://www.automobilemag.com/uploads/sites/11/2020/07/2001-Acura-Integra-Type-R-lead-image.jpg',
-        },
-        {
-            username: 'Peter',
-            caption: 'Wow it works',
-            imageUrl:
-                'https://www.automobilemag.com/uploads/sites/11/2020/07/2001-Acura-Integra-Type-R-lead-image.jpg',
-        },
-    ]);
+    const [posts, setPosts] = useState([]);
+
+    // useEffect Runs a piece of code based on a specific condition
+
+    useEffect(() => {
+        //this is where the code runs
+        db.collection('posts').onSnapshot(snapshot => {
+            // everytime a new post is added, this code fires
+            setPosts(snapshot.docs.map(doc => doc.data()))
+        })
+    }, [])
 
     return (
         <div className="app">
@@ -25,7 +23,7 @@ function App() {
                 src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
                 alt=""
             />
-            <h1>Hello Everyone!!!</h1>
+            <h1>IG stories go here!!!</h1>
             {
             post.map(post => (
                 <Post
